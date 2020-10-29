@@ -68,20 +68,20 @@
   
   var chartPosition = new Highcharts.Chart({
     chart:{ renderTo:'chart-posicion' },
-    title: { text: 'POSICION CARRO' },
+    title: { text: 'POSICIÓN ROBOT' },
     series: [{
-    showInLegend: false,
-    data: []
+    showInLegend: true, 
+    data: [], name: 'Posición X'
     },{
-        showInLegend: false,
-    data: []
+        showInLegend: true,
+    data: [],name: 'Posición Y'
     }, {
-        showInLegend: false,
-    data: []
+        showInLegend: true,
+    data: [], name: 'Ángulo theta'
     }],
     plotOptions: {
       line: { animation: false,
-        dataLabels: { enabled: true }
+        dataLabels: { enabled: false }
       }
     },
     xAxis: {
@@ -148,7 +148,7 @@
         if(chartTrayectoria.series[0].data.length > 40) {
           chartTrayectoria.series[0].addPoint([yPositionX, yPostionY], true, true, true);
         } else {
-          chartTrayectoria.series[0].addPoint([5, 8], true, false, true);
+          chartTrayectoria.series[0].addPoint([yPositionX, yPostionY], true, false, true);
         }
       }
     };
@@ -167,4 +167,8 @@
     xhttp.send(params);
   });
   </script>
+  <h6>Diseño:
+  </h6>
+  <h7>Brandon F. Loaiza</h7><br>
+  <h7>Daniel S. Garcia</h7>
   </html>
