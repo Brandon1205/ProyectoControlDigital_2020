@@ -145,7 +145,8 @@
           chartVelocidad.series[0].addPoint([xTiempo, yVelocidad], true, false, true);
         }
         if(chartTrayectoria.series[0].data.length > 40) {
-          chartTrayectoria.series[0].addPoint([yPositionX, yPostionY]);
+          k=1;
+          chartTrayectoria.series[0].addPoint([30*(k++), Math.random()*100]);
         }
       }
     };
