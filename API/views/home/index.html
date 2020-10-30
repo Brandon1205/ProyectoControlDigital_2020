@@ -144,17 +144,91 @@
         } else {
           chartVelocidad.series[0].addPoint([xTiempo, yVelocidad], true, false, true);
         }
-        
         if(chartTrayectoria.series[0].data.length > 40) {
-          setInterval(function(){
-          chartTrayectoria.series[0].addPoint([yPositionX, yPostionY]);
-        },500) } else {
+          chartTrayectoria.series[0].addPoint([yPositionX, yPostionY], true, true, true);
+        } else {
           chartTrayectoria.series[0].addPoint([yPositionX, yPostionY], true, false, true);
         }
+      }
+    };
+
+    var chart = Highcharts.chart('container', {
+  chart: {
+    type: 'scatter',
+    
+    events: {
+      click: function (e) {
+        // find the clicked values and the series
+        var x = Math.round(e.xAxis[0].value),
+          y = Math.round(e.yAxis[0].value),
+          series = this.series;
+        // Add new series if not
+        if (series.length<2){
+          this.addSeries({                     
+            name: 'clicked-series',
+            data: [[x, y]]
+          });
+        } else { // add new point
+          series[1].addPoint([x, y])
+        }
+
+      }
+    }
+  },
+  title: {
+    text: 'User supplied data'
+  },
+  subtitle: {
+    text: 'Click the plot area to add a new to new series point. .'
+  },
+  xAxis: {
+    gridLineWidth: 1,
+    minPadding: 0.2,
+    maxPadding: 0.2,
+    maxZoom: 60
+  },
+  yAxis: {
+    title: {
+      text: 'Value'
+    },
+    minPadding: 0.2,
+    maxPadding: 0.2,
+    maxZoom: 60,
+    plotLines: [{
+      value: 0,
+      width: 1,
+      color: '#808080'
+    }]
+  },
+  legend: {
+    enabled: false
+  },
+  exporting: {
+    enabled: false
+  },
+  plotOptions: {
+    series: {
+      lineWidth: 1,
+      point: {
+        
+      }
+    }
+  },
+  series: [{
+    data: [[20, 20], [30, 80]]
+  }]
+});
+k=1;
+setInterval(function(){
+  chart.series[0].addPoint([posicionX, posicionY])
+  
+},1000)
 
     xhttp.open("GET", "/datos/5f94a0354ac35f26b438a2b5", true);
     xhttp.send();
   }, 500 );
+
+  
   
   document.querySelector('#botonform').addEventListener('click', () => {
     const vl = document.querySelector('#vl');
