@@ -97,7 +97,7 @@
   var chartTrayectoria = new Highcharts.Chart({
     chart:{ renderTo : 'chart-trayectoria', type: 'scatter' },
     title: { text: 'TRAYECTORIA ROBOT' },
-    series: [{ threshold: null,
+    series: [{ threshold: null, connectNulls: true,
       showInLegend: false,
       data: []
     }],
