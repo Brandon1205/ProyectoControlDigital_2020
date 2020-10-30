@@ -97,17 +97,17 @@
   var chartTrayectoria = new Highcharts.Chart({
     chart:{ renderTo : 'chart-trayectoria', type: 'scatter' },
     title: { text: 'TRAYECTORIA ROBOT' },
-    series: [{ threshold: null,
+    series: [{ turboThreshold: 1000,
       showInLegend: false,
       data: []
     }],
     plotOptions: {
       line: { animation: true,
-        dataLabels: { enabled: false, type: 'arearange' }
+        dataLabels: { enabled: false }
       },
       series: { color: '#059e8a' }
     },
-    xAxis: { title: { text: 'Eje X'}, threshold: null
+    xAxis: { title: { text: 'Eje X'}, turboThreshold: 1000
     },
     yAxis: {
       title: { text: 'Eje Y' }
