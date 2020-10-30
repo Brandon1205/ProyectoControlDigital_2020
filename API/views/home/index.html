@@ -102,7 +102,7 @@
       data: []
     }],
     plotOptions: {
-      line: { animation: false,
+      line: { animation: true,
         dataLabels: { enabled: false }
       },
       series: { color: '#059e8a' }
@@ -154,7 +154,7 @@
     };
     xhttp.open("GET", "/datos/5f94a0354ac35f26b438a2b5", true);
     xhttp.send();
-  }, 100 );
+  }, 150 );
   
   document.querySelector('#botonform').addEventListener('click', () => {
     const vl = document.querySelector('#vl');
@@ -167,8 +167,8 @@
     xhttp.send(params);
   });
   </script>
-  <h6>Diseño:
-  </h6>
+  <h7>Diseño:
+  </h7>
   <h6>Brandon F. Loaiza</h7><br>
   <h6>Daniel S. Garcia</h7>
   </html>
