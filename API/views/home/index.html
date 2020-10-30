@@ -144,19 +144,17 @@
         } else {
           chartVelocidad.series[0].addPoint([xTiempo, yVelocidad], true, false, true);
         }
-        if(chartTrayectoria.series[0].data.length > 40 ||chartTrayectoria.series[0].data.length <40 ) {
+        
+        if(chartTrayectoria.series[0].data.length > 40) {
           chartTrayectoria.series[0].addPoint([yPositionX, yPostionY], true, true, true);
         } else {
           chartTrayectoria.series[0].addPoint([yPositionX, yPostionY], true, false, true);
         }
       }
     };
-  
     xhttp.open("GET", "/datos/5f94a0354ac35f26b438a2b5", true);
     xhttp.send();
   }, 500 );
-
-  
   
   document.querySelector('#botonform').addEventListener('click', () => {
     const vl = document.querySelector('#vl');
