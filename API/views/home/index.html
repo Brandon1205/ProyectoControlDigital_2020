@@ -95,9 +95,9 @@
   });
 
   var chartTrayectoria = new Highcharts.Chart({
-    chart:{ renderTo : 'chart-trayectoria', type: 'scatter' },
+    chart:{ renderTo : 'chart-trayectoria', type: 'arearange' },
     title: { text: 'TRAYECTORIA ROBOT' },
-    series: [{ threshold: null, connectNulls: true,
+    series: [{ threshold: null,
       showInLegend: false,
       data: []
     }],
@@ -154,7 +154,7 @@
     };
     xhttp.open("GET", "/datos/5f94a0354ac35f26b438a2b5", true);
     xhttp.send();
-  }, 500 );
+  }, 100 );
   
   document.querySelector('#botonform').addEventListener('click', () => {
     const vl = document.querySelector('#vl');
