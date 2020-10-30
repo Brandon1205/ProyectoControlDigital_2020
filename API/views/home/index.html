@@ -1,0 +1,174 @@
+<head>
+  <title>ROBOT TRACCION DOBLE </title>
+  <link rel="icon" href="robot.png" type="image/png"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <script src="https://code.highcharts.com/highcharts.js"></script>
+    <style>
+      body {
+        min-width: 310px;
+          max-width: 800px;
+          height: 400px;
+        margin: 0 auto;
+      }
+      h2 {
+        font-family: Arial;
+        font-size: 2.5rem;
+        text-align: center;
+      }
+      .opcion {
+        margin-top: 5px;
+      }
+    </style>
+  </head>
+  <body>
+      <div class="graficas">
+      <h2>ROBOT TRACCIÓN DIFERENCIAL</h2>
+
+      <div class="formulario">
+        <form>
+          <div class="opcion">
+            <label for="vl" style="margin-right: 10px;">Ingresar velocidad lineal (cm/s): </label>
+            <input type="number" id="vl" value="0">
+    
+            <label for="controlador" style="margin-right: 10px;">Activar Controlador: </label>
+            <input type="checkbox" id="controlador" checked>
+          </div>
+          <button type="button" style="margin-top: 20px;"id="botonform">Enviar</button>
+        </form>
+      </div>
+  
+      <div id="chart-velocidad_lineal" class="container"></div>
+      <div id="chart-posicion" class="container"></div>
+      <div id="chart-trayectoria" class="container"></div>
+    </div>
+  </body>
+  <script>
+
+  var chartVelocidad = new Highcharts.Chart({
+    chart:{ renderTo : 'chart-velocidad_lineal' },
+    title: { text: 'VELOCIDAD LINEAL' },
+    series: [{
+      showInLegend: false,
+      data: []
+    }],
+    plotOptions: {
+      line: { animation: false,
+        dataLabels: { enabled: true }
+      },
+      series: { color: '#059e8a' }
+    },
+    xAxis: { type: 'datetime',
+      dateTimeLabelFormats: { second: '%H:%M:%S' }
+    },
+    yAxis: {
+      title: { text: 'VELOCIDAD (cm/s)' }
+    },
+    credits: { enabled: false }
+  });
+  
+  var chartPosition = new Highcharts.Chart({
+    chart:{ renderTo:'chart-posicion' },
+    title: { text: 'POSICIÓN ROBOT' },
+    series: [{
+    showInLegend: true, 
+    data: [], name: 'Posición X'
+    },{
+        showInLegend: true,
+    data: [],name: 'Posición Y'
+    }, {
+        showInLegend: true,
+    data: [], name: 'Ángulo theta'
+    }],
+    plotOptions: {
+      line: { animation: false,
+        dataLabels: { enabled: false }
+      }
+    },
+    xAxis: {
+      type: 'datetime',
+      dateTimeLabelFormats: { second: '%H:%M:%S' }
+    },
+    yAxis: {
+      title: { text: 'Posicion X Y Theta' }
+    },
+    credits: { enabled: false }
+  });
+
+  var chartTrayectoria = new Highcharts.Chart({
+    chart:{ renderTo : 'chart-trayectoria' },
+    title: { text: 'TRAYECTORIA ROBOT' },
+    series: [{ threshold: null,
+      showInLegend: false,
+      data: []
+    }],
+    plotOptions: {
+      line: { animation: false,
+        dataLabels: { enabled: false }
+      },
+      series: { color: '#059e8a' }
+    },
+    xAxis: { title: { text: 'Eje X'}, threshold: null
+    },
+    yAxis: {
+      title: { text: 'Eje Y' }
+    },
+    credits: { enabled: false }
+  });
+  
+  setInterval(function ( ) {
+    var xhttp = new XMLHttpRequest();
+    xhttp.onreadystatechange = function() {
+      if (this.readyState == 4 && this.status == 200) {        
+        const posicionX = JSON.parse(this.response).posicionX;
+        const posicionY= JSON.parse(this.response).posicionY;
+        const anguloGiro= JSON.parse(this.response).anguloGiro;
+        const velocidadLineal = JSON.parse(this.response).velocidadLineal;
+        var xTiempo = (new Date()).getTime(),
+        yPositionX = parseFloat(posicionX),
+        yPostionY = parseFloat(posicionY),
+        yAngulo = parseFloat(anguloGiro),
+        yVelocidad = parseFloat(velocidadLineal);
+        //console.log(this.responseText);
+        if(chartPosition.series[0].data.length > 40) {
+          chartPosition.series[0].addPoint([xTiempo, yPositionX], true, true, true);
+            chartPosition.series[1].addPoint([xTiempo, yPostionY], true, true, true);
+            chartPosition.series[2].addPoint([xTiempo, yAngulo], true, true, true);
+        } else {
+            chartPosition.series[0].addPoint([xTiempo, yPositionX], true, false, true);
+            chartPosition.series[1].addPoint([xTiempo, yPostionY], true, false, true);
+            chartPosition.series[2].addPoint([xTiempo, yAngulo], true, false, true);
+        }
+        
+        if(chartVelocidad.series[0].data.length > 40) {
+          chartVelocidad.series[0].addPoint([xTiempo, yVelocidad], true, true, true);
+        } else {
+          chartVelocidad.series[0].addPoint([xTiempo, yVelocidad], true, false, true);
+        }
+        if(chartTrayectoria.series[0].data.length > 40) {
+          chartTrayectoria.series[0].addPoint([yPositionX, yPostionY]);
+        }
+      }
+    };
+  
+    xhttp.open("GET", "/datos/5f94a0354ac35f26b438a2b5", true);
+    xhttp.send();
+  }, 500 );
+
+  
+  
+  document.querySelector('#botonform').addEventListener('click', () => {
+    const vl = document.querySelector('#vl');
+    const activaControlador = document.querySelector("#controlador");
+    const activar = activaControlador.checked;
+    const params = `entradaVelocidad=${vl.value}&activarControlador=${activar}`;
+    const xhttp = new XMLHttpRequest();
+    xhttp.open("POST", "/formulario");
+    xhttp.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+    xhttp.send(params);
+  });
+  </script>
+  <h6>Diseño:
+  </h6>
+  <h7>Brandon F. Loaiza</h7><br>
+  <h7>Daniel S. Garcia</h7>
+  </html>
