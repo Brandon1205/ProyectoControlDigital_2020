@@ -95,7 +95,7 @@
   });
 
   var chartTrayectoria = new Highcharts.Chart({
-    chart:{ renderTo : 'chart-trayectoria', type: 'scatter3d' },
+    chart:{ renderTo : 'chart-trayectoria', type: 'scatter' },
     title: { text: 'TRAYECTORIA ROBOT' },
     series: [{ threshold: null,
       showInLegend: false,
@@ -103,7 +103,7 @@
     }],
     plotOptions: {
       line: { animation: true,
-        dataLabels: { enabled: false }
+        dataLabels: { enabled: false, type: 'arearange' }
       },
       series: { color: '#059e8a' }
     },
